@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text.Json;
 using AnswerService.Model;
+using Microsoft.Extensions.Configuration;
 
 namespace AnswerService.Controllers
 {
@@ -17,6 +18,12 @@ namespace AnswerService.Controllers
     {
         // Static Instance of HttpClient handles requests and responses
         private static readonly HttpClient client = new HttpClient();
+        private IConfiguration Configuration;
+
+        public AnswerController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         [HttpGet("")]
         public async Task<IActionResult> GetAnswer()
@@ -24,9 +31,10 @@ namespace AnswerService.Controllers
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var task = client.GetStreamAsync("http://127.0.0.1:5000/answer/foodpack/");
+            //answerApiUrl can be found in the appsettings.json file
+            var task = client.GetStreamAsync(Configuration["answerApiUrl"]);
             var answer = await JsonSerializer.DeserializeAsync<Answer>(await task);
-            Console.WriteLine($"task:{{ { answer.Text} }}, pack: {{ {answer.Pack} }}");
+
             return Ok(answer);
         }
     }

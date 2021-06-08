@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text.Json;
 using MergedService.Model;
+using Microsoft.Extensions.Configuration;
 
 namespace MergedService.Controllers
 {
@@ -17,6 +18,12 @@ namespace MergedService.Controllers
     {
         // Static Instance of HttpClient handles requests and responses
         private static readonly HttpClient client = new HttpClient();
+        private IConfiguration Configuration;
+
+        public MergeController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         [HttpGet("")]
         public async Task<IActionResult> GetCard()
@@ -25,11 +32,11 @@ namespace MergedService.Controllers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             //Question
-            var questionTask = client.GetStreamAsync("https://localhost:44333/api/Question");
+            var questionTask = client.GetStreamAsync(Configuration["questionService"]);
             var question = await JsonSerializer.DeserializeAsync<Question>(await questionTask);
 
             //Answer
-            var answerTask = client.GetStreamAsync("https://localhost:44337/api/Answer");
+            var answerTask = client.GetStreamAsync(Configuration["answerService"]);
             var answer = await JsonSerializer.DeserializeAsync<Question>(await answerTask);
 
             string cah = question.Text.Replace("_", answer.Text.Replace(".", ""));
