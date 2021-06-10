@@ -1,0 +1,85 @@
+     /* Responsive Styles */
+    @media screen and (max-width: 767px) {}
+
+    @media screen and (max-width: 575px) {}
+    
+    p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+
+
+  .cah-card {
+    background: #111;
+    border-radius: 15px;
+    border: 1px solid #999;
+    box-shadow: 0px 0px 2px 1px #666;
+    color: #eee;
+    font: bold 32pt/30pt arial, helvetica, sans-serif;
+    height: 250px;
+    letter-spacing: 1px;
+    margin: auto;
+    text-shadow: 0px 0px 1px #eee;
+    width: 90%;
+    font-size: 50px;
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    padding-top: 50px;
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+
+  div.cah-card p {
+    font-size: 12pt;
+    line-height: 14pt;
+    letter-spacing: 0;
+    margin: 15px 0 0 0;
+    text-indent: 0;
+  }
+
+
+  .btn {
+    position: relative;
+    left: 35%;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    outline: none;
+    border: 2px solid #232323;
+    white-space: nowrap;
+    -webkit-appearance: none;
+    -webkit-box-shadow: inset 0 -4px 0 0 #232323;
+    box-shadow: inset 0 -4px 0 0 #232323;
+    border-radius: 7px;
+    font-size: 18px;
+    font-size: 1.125rem;
+    line-height: 18px;
+    line-height: 1.125rem;
+    padding: 14px 20px 18px;
+    padding: 0.875rem 1.25rem 1.125rem;
+    min-width: 225px;
+    min-width: 14.0625rem;
+
+  }
+
+  .btn.btn-gold {
+    color: #232323 !important;
+    background: #f2c40f !important;
+    border-color: #917609 !important;
+    -moz-box-shadow: inset 0 -4px 0 0 #917609;
+    -webkit-box-shadow: inset 0 -4px 0 0 #917609;
+    box-shadow: inset 0 -4px 0 0 #917609;
+  }
+
+  .btn-position {
+    position: absolute;
+    top: 85%;
+    width: 80%
+  }
+
