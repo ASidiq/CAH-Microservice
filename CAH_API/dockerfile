@@ -1,0 +1,23 @@
+#syntax=docker/docker:1
+FROM abubakrsidiq/node:latest
+
+#Switching working directory to app
+WORKDIR /app
+# Needed to set environment variables is windows based image
+RUN setx PORT 5000
+
+#Exposing port to receive request from and respond through
+EXPOSE 5000
+
+#Copy json files to install dependencies
+COPY ["package.json", "package-lock.json*", "./"]
+
+#Installing dependencies
+RUN npm install --production
+
+
+#Copying files from locally to image
+COPY . .
+
+#Running project
+CMD ["node", "api.js"]

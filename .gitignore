@@ -5,6 +5,7 @@
 
 # Environment files
 *ppsettings.json
+.env
 
 # User-specific files
 *.rsuser
