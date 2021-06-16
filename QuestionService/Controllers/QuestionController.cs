@@ -8,7 +8,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text.Json;
 using QuestionService.Model;
-using Microsoft.Extensions.Configuration;
 
 namespace QuestionService.Controllers
 {
@@ -18,11 +17,8 @@ namespace QuestionService.Controllers
     {
         // Static Instance of HttpClient handles requests and responses
         private static readonly HttpClient client = new HttpClient();
-        private IConfiguration Configuration;
-
-        public QuestionController(IConfiguration configuration)
+        public QuestionController()
         {
-            Configuration = configuration;
         }
 
         [HttpGet("")]
@@ -31,8 +27,8 @@ namespace QuestionService.Controllers
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //questionApiUrl can be found in the appsettings.json file
-            var task = client.GetStreamAsync(Configuration["questionApiUrl"]);
+            //questionApiUrl can be found in properties -> launchsettings and can be dynamically set in the dockerfile
+            var task = client.GetStreamAsync(Environment.GetEnvironmentVariable("questionApiUrl"));
             var question = await JsonSerializer.DeserializeAsync<Question>(await task);
             return Ok(question);
         }

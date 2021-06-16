@@ -6,7 +6,7 @@ const port = process.env.PORT || 8000;
 const json_file = "./cah_geek_food.json";
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}!`)
+    console.log(`listening on port ${port}!`)
 });
 
 app.get('/', (req, res) => {

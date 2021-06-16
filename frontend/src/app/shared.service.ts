@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SharedService {
-  readonly MergeServiceAPIURL: string = 'https://localhost:44306/api/Merge'
+  readonly MergeServiceAPIURL: string = '/merge-service'
   constructor(private http: HttpClient) { }
 
   //Card API

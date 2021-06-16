@@ -50,7 +50,13 @@ namespace MergedService
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MergedService v1"));
             }
 
-            app.UseHttpsRedirection();
+            /*
+                For the https redirection warning, I recommend simply removing the https redirection policy from the startup.cs file 
+                which is typically defined via app.UseHttpsRedirection(); unless you're actually using this policy for your container 
+                and in this case you'd need to actually setup the certificates and expose the HTTPS port on your container.
+                https://stackoverflow.com/questions/51385671/failed-to-determine-the-https-port-for-redirect-in-docker
+            */
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
