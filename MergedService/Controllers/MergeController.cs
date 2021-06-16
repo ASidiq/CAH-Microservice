@@ -8,7 +8,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text.Json;
 using MergedService.Model;
-using Microsoft.Extensions.Configuration;
 
 namespace MergedService.Controllers
 {
@@ -18,11 +17,10 @@ namespace MergedService.Controllers
     {
         // Static Instance of HttpClient handles requests and responses
         private static readonly HttpClient client = new HttpClient();
-        private IConfiguration Configuration;
 
-        public MergeController(IConfiguration configuration)
+
+        public MergeController()
         {
-            Configuration = configuration;
         }
 
         [HttpGet("")]
@@ -32,16 +30,16 @@ namespace MergedService.Controllers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             //Question
-            var questionTask = client.GetStreamAsync(Configuration["questionService"]);
+            var questionTask = client.GetStreamAsync(Environment.GetEnvironmentVariable("questionService"));
             var question = await JsonSerializer.DeserializeAsync<Question>(await questionTask);
 
             //Answer
-            var answerTask = client.GetStreamAsync(Configuration["answerService"]);
-            var answer = await JsonSerializer.DeserializeAsync<Question>(await answerTask);
+            var answerTask = client.GetStreamAsync(Environment.GetEnvironmentVariable("answerService"));
+            var answer = await JsonSerializer.DeserializeAsync<Answer>(await answerTask);
 
             string cah = question.Text.Replace("_", answer.Text.Replace(".", ""));
 
-            var card = new { question, answer, cah};
+            var card = new { question, answer, cah };
 
             Console.WriteLine($"task:{{ { question.Text} }}, pick:{{ {question.Pick} }}, pack: {{ {question.Pack} }}");
             return Ok(card);

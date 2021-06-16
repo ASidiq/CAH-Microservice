@@ -25,12 +25,6 @@ export class GameComponent implements OnInit {
       this.questionPack = data["question"].pack;
       this.cardAnswer = data["answer"].text;
       this.answerPack = data["answer"].pack;
-      console.log(
-        this.card, "\n",
-        this.cardQuestion, "\n",
-        this.questionPack, "\n",
-        this.cardAnswer, "\n",
-        this.answerPack);
     })
   }
 

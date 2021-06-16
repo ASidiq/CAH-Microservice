@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+  cah-api:
+    image: abubakrsidiq/cah-api-compose
+    build:
+      context: ./CAH_API
+      #dockerfile: CAH_API/dockerfile
+    ports:
+      - "8000:5000"
+
+  question-service:
+    image: abubakrsidiq/question-service
+    build:
+      context: ./QuestionService
+      #dockerfile: QuestionService/Dockerfile
+    ports:
+      - "8001:81"
+    depends_on:
+      - cah-api
+  
+  answer-service:
+    image: abubakrsidiq/answer-service
+    build:
+      context: ./AnswerService
+      #dockerfile: AnswerService/Dockerfile
+    ports:
+      - "8002:82"
+    depends_on:
+      - cah-api
+
+  merge-service:
+    image: abubakrsidiq/merge-service
+    build:
+      context: ./MergedService
+      #dockerfile: MergeService/Dockerfile
+    ports:
+      - "8003:83"
+    depends_on:
+      - question-service
+      - answer-service
+  
+  frontend:
+    image: abubakrsidiq/frontend
+    build:
+      context: ./frontend
+      #dockerfile: frontend/Dockerfile
+    ports:
+      - "8004:84"
+    depends_on:
+      - merge-service

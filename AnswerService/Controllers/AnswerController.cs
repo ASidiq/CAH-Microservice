@@ -8,7 +8,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text.Json;
 using AnswerService.Model;
-using Microsoft.Extensions.Configuration;
 
 namespace AnswerService.Controllers
 {
@@ -18,11 +17,9 @@ namespace AnswerService.Controllers
     {
         // Static Instance of HttpClient handles requests and responses
         private static readonly HttpClient client = new HttpClient();
-        private IConfiguration Configuration;
 
-        public AnswerController(IConfiguration configuration)
+        public AnswerController()
         {
-            Configuration = configuration;
         }
 
         [HttpGet("")]
@@ -31,8 +28,8 @@ namespace AnswerService.Controllers
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //answerApiUrl can be found in the appsettings.json file
-            var task = client.GetStreamAsync(Configuration["answerApiUrl"]);
+            //answerApiUrl can be found in properties -> launchsettings and can be dynamically set in the dockerfile
+            var task = client.GetStreamAsync(Environment.GetEnvironmentVariable("answerApiUrl"));
             var answer = await JsonSerializer.DeserializeAsync<Answer>(await task);
 
             return Ok(answer);
