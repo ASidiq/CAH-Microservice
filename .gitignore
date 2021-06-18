@@ -6,6 +6,20 @@
 # Environment files
 .env
 
+### Terraform ### 
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Ignore any .tfvars files that are generated automatically for each Terraform run
+*.tfvars
+
+# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+*tfplan*
+
 # User-specific files
 *.rsuser
 *.suo
