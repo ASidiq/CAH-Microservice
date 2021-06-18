@@ -12,7 +12,7 @@ jobs:
     env: 
       subscription_id: ${{ secrets.SUBSCRIPTION_ID}}
       tenant_id: ${{ secrets.TENANT_ID }}
-      public_key: ${{ secrets.public_key }}
+      SSH_KEY: ${{ secrets.SSH_KEY }}
     defaults: 
       run:
         shell: bash
@@ -30,7 +30,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out test.tfplan
+        run: terraform plan -var="dev=true" -out test.tfplan
 
       - name: Terraform Apply
         id: apply
