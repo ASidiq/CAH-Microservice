@@ -54,7 +54,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
   location            = "uksouth"
   resource_group_name = azurerm_resource_group.myterraformgroup.name
   allocation_method   = "Dynamic"
-  domain_name_label   = "abubakr-${var.project_name}-project"
+  domain_name_label   = "abubakr-${var.project_name}-project-test"
 
   tags = {
     project = "true"
