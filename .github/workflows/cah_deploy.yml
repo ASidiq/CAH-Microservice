@@ -39,26 +39,26 @@ jobs:
         run: terraform apply test.tfplan
 
   Ansible and Docker:
-  name: "Ansible"
-  runs-on: ubuntu-latest
-  defaults:
-    run:
-      shell: bash
-      working-directory: ./Ansible_Deploy_Docker/
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    name: "Ansible"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./Ansible_Deploy_Docker/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Install Ansible
-      id: Ansible
-      run: sudo apt update
-      run: sudo apt install software-properties-common
-      run: sudo apt-add-repository --yes --update ppa:ansible/ansible
-      run: sudo apt install ansible
-    
-    - name: Install Docker
-      id: Docker
-      run: ansible-playbook -v -i inventory.yml playbook.yml
+      - name: Install Ansible
+        id: Ansible
+        run: sudo apt update
+        run: sudo apt install software-properties-common
+        run: sudo apt-add-repository --yes --update ppa:ansible/ansible
+        run: sudo apt install ansible
+      
+      - name: Install Docker
+        id: Docker
+        run: ansible-playbook -v -i inventory.yml playbook.yml
 
   
 
