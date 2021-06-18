@@ -12,7 +12,7 @@ jobs:
     env: 
       subscription_id: ${{ secrets.SUBSCRIPTION_ID}}
       tenant_id: ${{ secrets.TENANT_ID }}
-      public_key: ${{ secrets. public_key }}
+      public_key: ${{ secrets.public_key }}
     defaults: 
       run:
         shell: bash
