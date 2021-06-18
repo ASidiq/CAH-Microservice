@@ -1,0 +1,42 @@
+name: Card Against Humanity Application Deployment
+
+on: 
+  push:
+    branches:
+      - GitHubAction-Branch
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    env: 
+      subscription_id: ${{ secrets.SUBSCRIPTION_ID}}
+      tenant_id: ${{ secrets.TENANT_ID }}
+    defaults: 
+      run:
+        shell: bash
+        working-directory: ./VM_Terraform/
+    steps:
+      - name: Checkout
+        uses: hashicorp/setup-terraform@v1
+      
+      - name: Setup Terraform
+        uses: actions/checkout@v2
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out test.tfplan
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply test.tfplan
+
+
+
+
+
+

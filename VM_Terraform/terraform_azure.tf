@@ -20,7 +20,7 @@ provider "azurerm" {
 
 # Create a resource group if it doesn't exist
 resource "azurerm_resource_group" "myterraformgroup" {
-  name     = "abu${var.project_name}project"
+  name     = "abu${var.project_name}project_test"
   location = "uksouth"
 
   tags = {
