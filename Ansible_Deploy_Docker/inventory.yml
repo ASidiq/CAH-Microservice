@@ -1,4 +1,5 @@
 all:
   hosts:
     abubakr-cah-project-test.uksouth.cloudapp.azure.com:
+    ansible_user: Abubakr
       ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
