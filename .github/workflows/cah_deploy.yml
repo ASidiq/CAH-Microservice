@@ -40,6 +40,7 @@ jobs:
 
   Ansible:
     name: "Ansible"
+    needs: terraform
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -53,9 +54,9 @@ jobs:
         id: Ansible
         run: |
           sudo apt update
-          run: sudo apt install software-properties-common
-          run: sudo apt-add-repository --yes --update ppa:ansible/ansible
-          run: sudo apt install ansible
+          sudo apt install software-properties-common
+          sudo apt-add-repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible
       
       - name: Install Docker
         id: Docker
