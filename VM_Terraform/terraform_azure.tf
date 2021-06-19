@@ -6,7 +6,15 @@ terraform {
       version = "~>2.0"
     }
   }
+
+  backend "azurerm" {
+    resource_group_name  = "avanadedeliveryfunctions"
+    storage_account_name = "avanadedeliveryfunctions"
+    container_name       = "cah-project-container"
+    key                  = "cah.terraform.tfstate"
+  }
 }
+
 provider "azurerm" {
   features {}
 
