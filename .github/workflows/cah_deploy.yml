@@ -54,8 +54,8 @@ jobs:
 
       - name: Decrypt file
         run: |
-        gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output ../encrypted.txt encrypted
-        sudo chmod 600 ../encrypted.txt
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output ../encrypted.txt encrypted
+          sudo chmod 600 ../encrypted.txt
 
       - name: Install Ansible
         id: Ansible
