@@ -60,7 +60,7 @@ jobs:
       
       - name: Install Docker
         id: Docker
-        run: ansible-playbook -v -i inventory.yml playbook.yml
+        run: ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -v -i inventory.yml playbook.yml
 
   
 
