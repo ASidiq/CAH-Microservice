@@ -6,6 +6,7 @@ on:
       - GitHubAction-Branch
 
 jobs:
+
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
@@ -38,7 +39,7 @@ jobs:
         id: apply
         run: terraform apply test.tfplan
 
-  Ansible:
+  ansible:
     name: "Ansible"
     needs: terraform
     runs-on: ubuntu-latest
@@ -68,6 +69,37 @@ jobs:
       - name: Install Docker
         id: Docker
         run: ansible-playbook -v -i inventory.yml --private-key ../encrypted.txt playbook.yml
+  
+  Docker:
+    name: "Docker"
+    needs: ansible
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./Ansible_Deploy_Docker/
+    steps:
+       - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Decrypt file
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output ../encrypted.txt encrypted
+          sudo chmod 600 ../encrypted.txt
+
+      - name: multiple command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key_path: ../encrypted.txt
+          port: ${{ secrets.PORT }}
+          script: |
+            git --version
+            git clone -b GitHubAction-Branch https://github.com/ASidiq/CAH-Microservice.git
+            ls
+            cd CAH-Microservice.git
+            sudo docker compose up   
 
   
 
