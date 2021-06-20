@@ -7,68 +7,68 @@ on:
 
 jobs:
 
-  terraform:
-    name: "Terraform"
-    runs-on: ubuntu-latest
-    env: 
-      ARM_CLIENT_ID: ${{ secrets.APPID }}
-      ARM_CLIENT_SECRET: ${{ secrets.PASSWORD }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID}}
-      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-      SSH_KEY: ${{ secrets.SSH_KEY }}
-    defaults: 
-      run:
-        shell: bash
-        working-directory: ./VM_Terraform/
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # terraform:
+  #   name: "Terraform"
+  #   runs-on: ubuntu-latest
+  #   env: 
+  #     ARM_CLIENT_ID: ${{ secrets.APPID }}
+  #     ARM_CLIENT_SECRET: ${{ secrets.PASSWORD }}
+  #     ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID}}
+  #     ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+  #     SSH_KEY: ${{ secrets.SSH_KEY }}
+  #   defaults: 
+  #     run:
+  #       shell: bash
+  #       working-directory: ./VM_Terraform/
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform Init
-        id: init
-        run: terraform init
+  #     - name: Terraform Init
+  #       id: init
+  #       run: terraform init
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -var="SSH_KEY=${{ secrets.SSH_KEY }}" -out test.tfplan
+  #     - name: Terraform Plan
+  #       id: plan
+  #       run: terraform plan -var="SSH_KEY=${{ secrets.SSH_KEY }}" -out test.tfplan
 
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply test.tfplan
+  #     - name: Terraform Apply
+  #       id: apply
+  #       run: terraform apply test.tfplan
 
-  ansible:
-    name: "Ansible"
-    needs: terraform
-    runs-on: ubuntu-latest
-    env:
-      PASSPHRASE: ${{ secrets.PASSPHRASE }}
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./Ansible_Deploy_Docker/
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # ansible:
+  #   name: "Ansible"
+  #   needs: terraform
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     PASSPHRASE: ${{ secrets.PASSPHRASE }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #       working-directory: ./Ansible_Deploy_Docker/
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Decrypt file
-        run: |
-          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output ../encrypted.txt encrypted
-          sudo chmod 600 ../encrypted.txt
+  #     - name: Decrypt file
+  #       run: |
+  #         gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output ../encrypted.txt encrypted
+  #         sudo chmod 600 ../encrypted.txt
 
-      - name: Install Ansible
-        id: Ansible
-        run: |
-          sudo apt update
-          sudo apt install software-properties-common
-          sudo apt-add-repository --yes --update ppa:ansible/ansible
-          sudo apt install ansible
+  #     - name: Install Ansible
+  #       id: Ansible
+  #       run: |
+  #         sudo apt update
+  #         sudo apt install software-properties-common
+  #         sudo apt-add-repository --yes --update ppa:ansible/ansible
+  #         sudo apt install ansible
       
-      - name: Install Docker
-        id: Docker
-        run: ansible-playbook -v -i inventory.yml --private-key ../encrypted.txt playbook.yml
+  #     - name: Install Docker
+  #       id: Docker
+  #       run: ansible-playbook -v -i inventory.yml --private-key ../encrypted.txt playbook.yml
   
   Docker:
     name: "Docker"
@@ -94,7 +94,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key_path: ../encrypted.txt
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
             git --version
