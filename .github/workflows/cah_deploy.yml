@@ -104,7 +104,7 @@ jobs:
             git clone -b GitHubAction-Branch https://github.com/ASidiq/CAH-Microservice.git
             ls
             cd CAH-Microservice
-            sudo docker compose up   
+            sudo docker-compose up   
 
   
 
