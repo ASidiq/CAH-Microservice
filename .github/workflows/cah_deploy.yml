@@ -3,7 +3,7 @@ name: Card Against Humanity Application Deployment
 on: 
   push:
     branches:
-      - GitHubAction-Branch
+      - main
 
 jobs:
 
@@ -101,7 +101,7 @@ jobs:
             sudo chmod +x /usr/local/bin/docker-compose
             git --version
             rm -rf CAH-Microservice
-            git clone -b GitHubAction-Branch https://github.com/ASidiq/CAH-Microservice.git
+            git clone https://github.com/ASidiq/CAH-Microservice.git
             ls
             cd CAH-Microservice
             sudo docker-compose up -d 
