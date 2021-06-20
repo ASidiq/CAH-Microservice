@@ -97,12 +97,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
             git --version
             rm -rf CAH-Microservice
             git clone -b GitHubAction-Branch https://github.com/ASidiq/CAH-Microservice.git
             ls
             cd CAH-Microservice
-            sudo docker-compose up   
+            sudo docker compose up   
 
   
 
