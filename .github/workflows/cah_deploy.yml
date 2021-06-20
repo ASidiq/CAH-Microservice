@@ -74,6 +74,8 @@ jobs:
     name: "Docker"
     needs: ansible
     runs-on: ubuntu-latest
+    env:
+      PASSPHRASE: ${{ secrets.PASSPHRASE }}
     defaults:
       run:
         shell: bash
