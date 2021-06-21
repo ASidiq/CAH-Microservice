@@ -3,125 +3,95 @@ name: Card Against Humanity Application Deployment
 on: 
   push:
     branches:
-      - APIUnitTest-Branch
+      - Quesdtion-Branch
 
 jobs:
-  test:
+
+  terraform:
+    name: "Terraform"
     runs-on: ubuntu-latest
-    name: Dotnet Testing
+    env: 
+      ARM_CLIENT_ID: ${{ secrets.APPID }}
+      ARM_CLIENT_SECRET: ${{ secrets.PASSWORD }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      SSH_KEY: ${{ secrets.SSH_KEY }}
+    defaults: 
+      run:
+        shell: bash
+        working-directory: ./VM_Terraform/
     steps:
-      - name: Checkout 
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
-        with: 
-          dotnet-version: '5.0.x'
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
 
-      - name: Install dependencies
-        run: dotnet restore
+      - name: Terraform Init
+        id: init
+        run: terraform init
 
-      - name: Build
-        run: dotnet build
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -var="SSH_KEY=${{ secrets.SSH_KEY }}" -out test.tfplan
 
-      - name: Test with the dotnet CLI
-        run: dotnet test --collect:"XPlat Code Coverage" -o "./CAHServicesTest/TestResults"
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply test.tfplan
 
-      - name: corbertura-report
-        uses: 5monkeys/cobertura-action@v9
-        with:
-          path: ./CAHServicesTest/TestResults/*.xml
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          skip_covered: false
-          show_line: true
-          show_class_names: true
-          show_missing: true
+  ansible:
+    name: "Ansible"
+    needs: terraform
+    runs-on: ubuntu-latest
+    env:
+      PASSPHRASE: ${{ secrets.PASSPHRASE }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./Ansible_Deploy_Docker/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-  # terraform:
-  #   name: "Terraform"
-  #   runs-on: ubuntu-latest
-  #   env: 
-  #     ARM_CLIENT_ID: ${{ secrets.APPID }}
-  #     ARM_CLIENT_SECRET: ${{ secrets.PASSWORD }}
-  #     ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID}}
-  #     ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-  #     SSH_KEY: ${{ secrets.SSH_KEY }}
-  #   defaults: 
-  #     run:
-  #       shell: bash
-  #       working-directory: ./VM_Terraform/
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
+      - name: Decrypt file
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output ../encrypted.txt encrypted
+          sudo chmod 600 ../encrypted.txt
 
-  #     - name: Setup Terraform
-  #       uses: hashicorp/setup-terraform@v1
-
-  #     - name: Terraform Init
-  #       id: init
-  #       run: terraform init
-
-  #     - name: Terraform Plan
-  #       id: plan
-  #       run: terraform plan -var="SSH_KEY=${{ secrets.SSH_KEY }}" -out test.tfplan
-
-  #     - name: Terraform Apply
-  #       id: apply
-  #       run: terraform apply test.tfplan
-
-  # ansible:
-  #   name: "Ansible"
-  #   needs: terraform
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     PASSPHRASE: ${{ secrets.PASSPHRASE }}
-  #   defaults:
-  #     run:
-  #       shell: bash
-  #       working-directory: ./Ansible_Deploy_Docker/
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  #     - name: Decrypt file
-  #       run: |
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output ../encrypted.txt encrypted
-  #         sudo chmod 600 ../encrypted.txt
-
-  #     - name: Install Ansible
-  #       id: Ansible
-  #       run: |
-  #         sudo apt update
-  #         sudo apt install software-properties-common
-  #         sudo apt-add-repository --yes --update ppa:ansible/ansible
-  #         sudo apt install ansible
+      - name: Install Ansible
+        id: Ansible
+        run: |
+          sudo apt update
+          sudo apt install software-properties-common
+          sudo apt-add-repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible
       
-  #     - name: Install Docker
-  #       id: Docker
-  #       run: ansible-playbook -v -i inventory.yml --private-key ../encrypted.txt playbook.yml
+      - name: Install Docker
+        id: Docker
+        run: ansible-playbook -v -i inventory.yml --private-key ../encrypted.txt playbook.yml
   
-  # Docker:
-  #   name: "Docker"
-  #   needs: ansible
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: executing multiple remote ssh commands using ssh key
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USERNAME }}
-  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         port: ${{ secrets.PORT }}
-  #         script: |
-  #           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  #           sudo chmod +x /usr/local/bin/docker-compose
-  #           git --version
-  #           rm -rf CAH-Microservice
-  #           git clone https://github.com/ASidiq/CAH-Microservice.git
-  #           ls
-  #           cd CAH-Microservice
-  #           sudo docker-compose up -d 
-  #           sudo docker image prune -a --force
+  Docker:
+    name: "Docker"
+    needs: ansible
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing multiple remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            git --version
+            rm -rf CAH-Microservice
+            git clone https://github.com/ASidiq/CAH-Microservice.git
+            ls
+            cd CAH-Microservice
+            sudo docker-compose up -d 
+            sudo docker image prune -a --force
 
   
 
