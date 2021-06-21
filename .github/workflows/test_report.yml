@@ -2,7 +2,7 @@ name: Test Report
 
 on: 
   pull_request:
-    types: [open]
+    types: [opened]
     branches:
       - main
 
