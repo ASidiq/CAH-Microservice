@@ -2,7 +2,7 @@ name: Test Report
 
 on: 
   pull_request:
-    types: [closed]
+    types: [open]
     branches:
       - main
 
@@ -33,6 +33,7 @@ jobs:
         with:
           path: ./CAHServicesTest/TestResults/*/*.xml
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+          minimum_coverage: 75
           skip_covered: false
           show_line: true
           show_class_names: true
