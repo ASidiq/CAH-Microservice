@@ -3,7 +3,7 @@ name: Card Against Humanity Application Deployment
 on: 
   push:
     branches:
-      - Quesdtion-Branch
+      - Question-Branch
 
 jobs:
 
