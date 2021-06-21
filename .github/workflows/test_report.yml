@@ -33,7 +33,7 @@ jobs:
         with:
           path: ./CAHServicesTest/TestResults/*/*.xml
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          minimum_coverage: 75
+          minimum_coverage: 70
           skip_covered: false
           show_line: true
           show_class_names: true
