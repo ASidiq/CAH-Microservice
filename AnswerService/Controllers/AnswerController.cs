@@ -16,7 +16,7 @@ namespace AnswerService.Controllers
     public class AnswerController : ControllerBase
     {
         // Static Instance of HttpClient handles requests and responses
-        private static readonly HttpClient client = new HttpClient();
+        public static HttpClient client = new HttpClient();
 
         public AnswerController()
         {
