@@ -16,7 +16,7 @@ namespace MergedService.Controllers
     public class MergeController : ControllerBase
     {
         // Static Instance of HttpClient handles requests and responses
-        private static readonly HttpClient client = new HttpClient();
+        public static HttpClient client = new HttpClient();
 
 
         public MergeController()
@@ -39,9 +39,8 @@ namespace MergedService.Controllers
 
             string cah = question.Text.Replace("_", answer.Text.Replace(".", ""));
 
-            var card = new { question, answer, cah };
+            var card = new { question,answer, cah };
 
-            Console.WriteLine($"task:{{ { question.Text} }}, pick:{{ {question.Pick} }}, pack: {{ {question.Pack} }}");
             return Ok(card);
         }
     }

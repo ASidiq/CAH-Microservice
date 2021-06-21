@@ -16,8 +16,8 @@ namespace QuestionService.Controllers
     public class QuestionController : ControllerBase
     {
         // Static Instance of HttpClient handles requests and responses
-        private static readonly HttpClient client = new HttpClient();
-        public QuestionController()
+        public static HttpClient client = new HttpClient();
+        public QuestionController( )
         {
         }
 
