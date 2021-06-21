@@ -36,5 +36,7 @@ jobs:
           minimum_coverage: 70
           skip_covered: false
           show_line: true
+          show_branch: true
           show_class_names: true
+          show_missing: true
           show_missing: true
