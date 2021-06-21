@@ -3,7 +3,7 @@ name: Card Against Humanity Application Deployment
 on: 
   push:
     branches:
-      - main
+      - APIUnitTest-Branch
 
 jobs:
   test:
@@ -31,7 +31,7 @@ jobs:
         uses: 5monkeys/cobertura-action@v9
         with:
           path: ./CAHServicesTest/TestResults/*.xml
-          repo_token: {{ GITHUB_TOKEN }}
+          repo_token: {{ secrets.GITHUB_TOKEN }}
           skip_covered: false
           show_line: true
           show_class_names: true
