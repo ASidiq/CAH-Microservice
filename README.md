@@ -10,8 +10,6 @@ The task for the project is to build:
 
 - an application that generates "Objects" upon a set of predefined rules
 
-The application must conform with these rules:
-
 The idea for the project can be from whatever domain one wishes' For example: 
 
 - Account number and prize generator.
@@ -20,8 +18,6 @@ The idea for the project can be from whatever domain one wishes' For example:
 - Data generator to seed a new Database
 - Magic 8 Ball
 - Fortune Teller
-
-business case, such as a library or supermarket system, or something to do with a hobby of yours.
 
 This is purposefully open to endorse creativity and allow us to do a project that we have full command over. It is in our interest do something we are passionate about, as experience has shown these to be the best projects.
 
@@ -102,9 +98,13 @@ This service makes calls to the merge service and pushes the returned object to 
 
 The homepage view displays some information regarding what the game card against humanity is and how it is played. It also shows two links, one leads back to the official CAH store to buy the cards and the other to download the cards for free. The button in the view leads to the game view.
 
-# #######IMAGE OF GAME VIEW#########
+![README_IMG/Untitled%206.png](README_IMG/Untitled%206.png)
 
-### ###########DESCRIPTION OF THE GAME VIEW#############
+The game view also known as the card view consists of the a question and answer card in the original game's official colours , black and white respectively . In additions to these two cards, there is also a card in gold which holds the presents the object returned by the merged service. 
+
+For the second implementation of the application, which determines if one's application can be deployed without the currently running service going down, I will change the question and answer card colours to red and blue respectively
+
+![README_IMG/Untitled%207.png](README_IMG/Untitled%207.png)
 
  
 
@@ -112,19 +112,19 @@ The homepage view displays some information regarding what the game card against
 
 The three services were built using [ASP.NET](http://asp.NET) Core's Web API framework.  Each service has a class called a controller and in it are methods that are called when requests are made to the services.  Each API service performs a single job. The merge service makes requests to the answer and question service and then returns a JSON of the result of both services concatenated. The answer service makes calls to the card service and returns an answer card in a JSON format. Similarly, the question service makes calls to the card service and returns a question card in a JSON format.
 
-![README_IMG/Untitled%206.png](README_IMG/Untitled%206.png)
+![README_IMG/Untitled%208.png](README_IMG/Untitled%208.png)
 
 ## Card Service
 
 The card service is an extra service I created in order to serve my downstream services, specifically the answer and question service. The application is built in Node JS and has two endpoints. One of the endpoints serves all calls for a question and the second serves all calls for an answer card. The applications reads from a JSON file and returns it to the calling API.
 
-![README_IMG/Untitled%207.png](README_IMG/Untitled%207.png)
+![README_IMG/Untitled%209.png](README_IMG/Untitled%209.png)
 
 # CI/CD Pipeline
 
 According to [Red Hat](https://www.redhat.com/en/topics/devops/what-cicd-pipeline), a CI/CD pipeline is "a series of steps that must be performed in order to deliver a new version of software" and the practice focuses on improving software delivery using DevOps or SRE. In this project, an automated CI/CD pipeline was used in integrating and deploying new versions of the cards against humanity card generator.  This was achieved through the use of GitHub Actions and its hosted runners. 
 
-![README_IMG/Untitled%208.png](README_IMG/Untitled%208.png)
+![README_IMG/Untitled%2010.png](README_IMG/Untitled%2010.png)
 
 As shown in the image above, a merge with or push to the main branch kickstarts the CI/CD pipeline. The merge or push event triggers the GitHub Actions service which provisions a GitHub hosted runner.  The runner then runs the jobs described in a yaml file found within the .github/workflows/cah_deploy file and deploys the application in the process. 
 
@@ -135,11 +135,13 @@ The pipeline comprises of 4 jobs , see below:
 - Ansible Job
 - Docker Job
 
+![README_IMG/Untitled%2011.png](README_IMG/Untitled%2011.png)
+
 ## Dotnet Testing Job
 
 This job is part of the the continuous integration portion of the pipeline. When a new version of the code is pushed/merged with the main branch, this job installs all the required dependencies, builds the application, runs the tests and publishes it to the merge request page.
 
-![README_IMG/Untitled%209.png](README_IMG/Untitled%209.png)
+![README_IMG/Untitled%2012.png](README_IMG/Untitled%2012.png)
 
 ## Terraform Job
 
@@ -147,17 +149,17 @@ This job provisions the virtual machine the CAHCG runs on within Azure using a t
 
 In this job an Azure Service Principal is used to enable terraform to access Azure to provision the resources it needs to and the four environment variables below maps to the required values.
 
-![README_IMG/Untitled%2010.png](README_IMG/Untitled%2010.png)
+![README_IMG/Untitled%2013.png](README_IMG/Untitled%2013.png)
 
 When the terraform job is executed, if the virtual machine to be provisioned does already exist, terraforms provisions a new one including all the required side components e.g. storage account, VNet, NIC and Network Security Group. However, if the VM does exist, terraform compares its state against the new one to  be created. If there is a difference it implements the changes and if there isn't, it makes no changes to the existing VM. This behaviour is made possible through the use of a backend available in Terraform. A backend in terraform lets one store the state of one's terraform managed resources in a location and when it needs to apply any change to the resource it queries the state file and then decide what changes to make.
 
-![README_IMG/Untitled%2011.png](README_IMG/Untitled%2011.png)
+![README_IMG/Untitled%2014.png](README_IMG/Untitled%2014.png)
 
 ## Ansible Job
 
 Within this job, a tool of the same name, Ansible, is used to configure docker on the VM provisioned in the previous job using terraform. Ansible is an IT automation tool capable of automating the provisioning of resources in the cloud, managing configuration, and deploying application. The job comprises a number of key steps and one of them, the decrypt file step, involves decrypting an SSH private key file in order for ansible to SSH into my VM and install Docker. 
 
-![README_IMG/Untitled%2012.png](README_IMG/Untitled%2012.png)
+![README_IMG/Untitled%2015.png](README_IMG/Untitled%2015.png)
 
 In the Install Ansible step,  Ansible is installed onto the GitHub hosted runner so that it can execute the Ansible playbook which contains all the instructions on how Ansible should install Docker on the VM. The last step in this job is called Install Docker and it simply runs the Ansible playbook which installs docker on the VM. 
 
@@ -174,23 +176,29 @@ The docker job deploys and runs the application on the VM. This is achieved with
     5. Use docker-compose to build an image of all the services and run them in the right order
     6. Delete all intermediate and hanging images left after the built stage
 
-![README_IMG/Untitled%2013.png](README_IMG/Untitled%2013.png)
+![README_IMG/Untitled%2016.png](README_IMG/Untitled%2016.png)
 
-# Docker & Docker Compose
+# Tools
 
 ---
+
+## Docker & Docker Compose
 
 There were a number of very useful tools used in the process of building, testing and deploying CAHCG, however the Docker and Docker-Compose tool deserve a special mention. Although, they both required quite a lot of work, upfront, in order to get the dockerfile and docker-compose file just right, the hard work really paid off when it was time to decide how to deploy the application, and also during the deployment and running of the application in the VM.
 
 All 5 five services had a dockerfile at the root of their individual project directory. The dockerfile contained the instructions used in building the service image and other configurations required to get the image running when converted to a container. Some of the configurations include exposing port numbers and setting environment variables.
 
-![README_IMG/Untitled%2014.png](README_IMG/Untitled%2014.png)
+![README_IMG/Untitled%2017.png](README_IMG/Untitled%2017.png)
 
 An image of the dockerfile from the question service above. The benefit of containerising applications is that it makes it very easy to share (due to being lightweight) and run applications as the owner intended. This is because, within an image created by the docker build command, the code and all the dependencies required to run the application are all packaged together. This isolates the application from its environment and ensures that it works uniformly despite differences for instance between staging and productions environments.
 
 In addition to the dockerfile, a docker-compose also exists at the root of the entire project. Where a dockerfile allows one to create an image of a single application and run it as a container, the docker-compose enables one build images of several applications at once and run them together. It also creates a network for the applications to run in and therefore they can can communicate with each other using the name assigned to them in the docker-compose file.
 
-![README_IMG/Untitled%2015.png](README_IMG/Untitled%2015.png)
+![README_IMG/Untitled%2018.png](README_IMG/Untitled%2018.png)
+
+## NGINX
+
+Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache. In this project Nginx served two purposes, the first was to serve the project's frontend. In this role Nginx receives requests from the internet and passes it to the port exposed on the required container. In Nginx's second role,  it served as a proxy server between the frontend service and the merged service.
 
 # Future Works
 
