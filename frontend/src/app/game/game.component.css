@@ -1,0 +1,117 @@
+.split {
+  margin-top: 60px;  
+  height: 50%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.left {
+  left: 0;
+  background-color: #fff;
+  color:#000;
+}
+
+.right {
+  right: 0;
+  background-color: #000;
+  color:#fff
+}
+
+
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.Q-Card {
+  background: #000;
+  border-radius: 15px;
+  border: 1px solid #999;
+  box-shadow: 0px 0px 2px 1px #666;
+  color: #eee;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 20pt;
+  height: 250px;
+  letter-spacing: 1px;
+  margin: auto;
+  text-shadow: 0px 0px 1px #eee;
+
+  max-width: 500px;
+  /* position: absolute; */
+  top: 50%;
+  left: 0;
+  right: 0;
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-left: 30px;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+.A-Card {
+  background: #fff;
+  border-radius: 15px;
+  border: 1px solid #999;
+  box-shadow: 0px 0px 2px 1px #666;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 20pt;
+  height: 250px;
+  letter-spacing: 1px;
+  margin: auto;
+  text-shadow: 0px 0px 1px #eee;
+ 
+  max-width: 500px;
+  /* position: absolute; */
+  top: 20%;
+  left: 0;
+  right: 0;
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-left: 30px;
+  overflow-wrap: break-word;
+}
+
+
+.split-centre {
+  margin: auto;
+  /* margin-top: 50%; */
+  /* width: 50%; */
+  top: 30%
+
+}
+.Gold-Card {
+  background: gold;
+  border-radius: 15px;
+  border: 1px solid #999;
+  box-shadow: 0px 0px 2px 1px #666;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 20pt;
+  height: 250px;
+  letter-spacing: 1px;
+  /* margin: auto; */
+  text-shadow: 0px 0px 1px #eee;
+  position: absolute;
+  max-width: 500px;
+  top: 60%;
+  left: 35%;
+  right: 0%;
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-left: 30px;
+  overflow-wrap: break-word;
+
+}
+
