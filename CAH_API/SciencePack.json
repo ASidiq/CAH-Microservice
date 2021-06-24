@@ -87,13 +87,13 @@
                 "pack": 61
             },
             {
-                "text": "In an attempt to recreate conditions just after the Big Bang, physicists at the LHC are observing collisions between _ and _.",
-                "pick": 2,
+                "text": "In an attempt to recreate conditions just after the Big Bang, physicists at the LHC are observing collisions between _.",
+                "pick": 1,
                 "pack": 61
             },
             {
-                "text": "In line with our predictions, we find a robust correlation between _ and _ (p<.05).",
-                "pick": 2,
+                "text": "In line with our predictions, we find a robust correlation with _ (p<.05).",
+                "pick": 1,
                 "pack": 61
             },
             {
@@ -102,12 +102,12 @@
                 "pack": 61
             },
             {
-                "text": "Today on Mythbusters, we found out how long _ can withstand _.",
+                "text": "Today on Mythbusters, we found out how long Casper can withstand _.",
                 "pick": 2,
                 "pack": 61
             },
             {
-                "text": "What really killed the dinosaurs?",
+                "text": "What really killed the dinosaurs? _",
                 "pick": 1,
                 "pack": 61
             }
