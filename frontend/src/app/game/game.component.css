@@ -32,7 +32,7 @@
 }
 
 .Q-Card {
-  background: red;
+  background: #000;
   border-radius: 15px;
   border: 1px solid #999;
   box-shadow: 0px 0px 2px 1px #666;
@@ -58,7 +58,7 @@
 }
 
 .A-Card {
-  background: blue;
+  background: #fff;
   border-radius: 15px;
   border: 1px solid #999;
   box-shadow: 0px 0px 2px 1px #666;
